@@ -1,0 +1,7 @@
+h1. Development
+
+Create and/or update some scripts (already existing) to perform java development on Ubuntu worsktation.
+
+- *dev/java/insgtall_java_dev.sh*
+
+This first script is an evolution of this script http://gsylvain35.googlecode.com/svn/scripts/developpement.sh
