@@ -20,7 +20,7 @@ if [ -x "internaltools.sh" ] then
 	wget $SCRIPT_URL"internaltools.sh"
 	sudo chmod +x "internaltools.sh"
 }
-source ./fonctions.sh
+source ./internaltools.sh
 
 # Vérifie les mises à jour
 CHECKUPDATE="TRUE"
@@ -29,36 +29,37 @@ check_update "install_dev_java.sh"
 
 print_help () 
 {
-    echo "Developpement Installation version "$VERSION
+    echo "Java Development Installation script version "$VERSION
 	echo "Usage : ./install_dev_java.sh -d PATH_INSTALL_DIR"
 
     echo "Options : "
- 	echo "   -h Ce texte d'aide "
-	echo "   -d [DOSSIER] indique le dossier d'installation "
+ 	echo "   -h This help text "
+	echo "   -d [Path] Installation path "
 }
 
 initInstallDir ()
 {
-	echo $1
+	echo 'path: '$1
 	PATH_INSTALL_DIR=$1
 	# Test que le dossier d'installation existe
 	if [ -d "$PATH_INSTALL_DIR" ]; then
-		log  "dossier d'installation :"$PATH_INSTALL_DIR
-		log  "Installation :"
+		log  "Installation path :"$PATH_INSTALL_DIR
+		log  "directory structure:"
+		log  ""$PATH_INSTALL_DIR
 		log  "|+eclipse "
-		log  "|+maven3 "
-		log  "|+serveurs |"
-		log  "	         |+ tomcat "
-		log  "           |+ nexus "
+		log  "|+maven "
+		log  "|+servers "
+		log  "    |+ tomcat "
+		log  "    |+ nexus "
 	else
-		echo  "dossier d'installation "$PATH_INSTALL_DIR" n'existe pas" 
+		echo  "Error: The provided installation path '"$PATH_INSTALL_DIR"' does not exist" 
 		exit 100
 	fi
 }
 echo $#
 if [ $# -eq 0 ]
 then
-    log "erreur options"
+    log "options error:"
     print_help && exit 0;
 fi
 
@@ -79,12 +80,12 @@ do
         log "Unknown option $OPTARG"
 	exit 0
         ;;
-      ":")
+        ":")
         log "No argument value for option $OPTARG"
 	exit 0        
 	;;
-      *)
-      # Should not occur
+        *)
+        # Should not occur
         log "Unknown error while processing options"
 	exit 0
         ;;
@@ -95,20 +96,21 @@ done
 eclipse_36 ()
 {
 	if [ -d "$PATH_INSTALL_DIR/eclipse/3.6" ]; then
-		log "Eclipse est déjà installé."
+		log "Eclipse 3.6 Helios already installed."
 	else
 		cd $PATH_INSTALL_DIR
 		archi
 		echo "archi "$arch
 		if [ "$arch" = "amd64" ]; then
-			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-linux-gtk-x86_64.tar.gz&url=http://mirrors.med.harvard.edu/eclipse//technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-linux-gtk-x86_64.tar.gz&mirror_id=530' "eclipse-java-helios-SR2-linux-gtk-x86_64.tar.gz"
+			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-jee-helios-SR2-linux-gtk-x86_64.tar.gz&url=http://eclipse.ialto.com/technology/epp/downloads/release/helios/SR2/eclipse-jee-helios-SR2-linux-gtk-x86_64.tar.gz&mirror_id=514'
 			sudo tar zxvf ./eclipse-java-helios-SR2-linux-gtk-x86_64.tar.gz
 			sudo mv eclipse-java-helios-SR2-linux-gtk-x86_64 eclipse/3.6
+			echo 'Eclipse 3.6 Helios 64 bits installed.'
 		else
-			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-linux-gtk.tar.gz'
+			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-jee-helios-SR2-linux-gtk.tar.gz&url=http://eclipse.ialto.com/technology/epp/downloads/release/helios/SR2/eclipse-jee-helios-SR2-linux-gtk.tar.gz&mirror_id=514'
 			sudo tar zxvf ./eclipse-java-helios-SR2-linux-gtk.tar.gz
 			sudo mv eclipse-java-helios-SR2-linux-gtk eclipse/3.6
-			echo 'todo'
+			echo 'Eclipse 3.6 Helios 32 bits installed.'
 		fi
 
 		cd eclipse/3.6
@@ -121,21 +123,21 @@ eclipse_37 ()
 {
 
 	if [ -d "$PATH_INSTALL_DIR/eclipse/3.7" ]; then
-		log "Eclipse est déjà installé."
+		log "Eclipse 3.7 Indigo already installed."
 	else
 		cd $PATH_INSTALL_DIR
 		archi
-		echo "archi "$arch
+		echo "Linux architechture: "$arch
 		if [ "$arch" = "amd64" ]; then
 			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/indigo/SR1/eclipse-jee-indigo-SR1-linux-gtk-x86_64.tar.gz&url=http://eclipse.ialto.com/technology/epp/downloads/release/indigo/SR1/eclipse-jee-indigo-SR1-linux-gtk-x86_64.tar.gz&mirror_id=514'
 			sudo tar zxvf ./eclipse-java-helios-SR2-linux-gtk-x86_64.tar.gz
 			sudo mv eclipse-java-helios-SR2-linux-gtk-x86_64 eclipse/3.7
-			echo 'eclipse 3.7 indigo 64 bits installed.'
+			echo 'Eclipse 3.7 Indigo 64 bits installed.'
 		else
 			sudo wget 'http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/indigo/SR1/eclipse-jee-indigo-SR1-linux-gtk.tar.gz&url=http://eclipse.ialto.com/technology/epp/downloads/release/indigo/SR1/eclipse-jee-indigo-SR1-linux-gtk.tar.gz&mirror_id=514'
 			sudo tar zxvf ./eclipse-jee-indigo-SR1-linux-gtk.tar.gz
 			sudo mv eclipse-java-helios-SR2-linux-gtk eclipse/3.7
-			echo 'eclipse 3.7 indigo 32 bits installed.'
+			echo 'Eclipse 3.7 Indigo 32 bits installed.'
 		fi
 
 		cd eclipse/3.7
@@ -144,20 +146,20 @@ eclipse_37 ()
 }
 
 # maven 3.0.3 installation process
-maven3 ()
+maven_3 ()
 {
-	if [ -d "$PATH_INSTALL_DIR/maven3" ]; then
-		echo "Maven 3 est déjà installé."
+	if [ -d "$PATH_INSTALL_DIR/maven/3.0.3" ]; then
+		echo "Maven 3 already installed."
 	else
 		sudo apt-get remove maven2 -y
 		cd $PATH_INSTALL_DIR
 	
 		sudo wget 'http://mirror.ibcp.fr/pub/apache//maven/binaries/apache-maven-3.0.3-bin.tar.gz'
 		sudo tar zxvf ./apache-maven-3.0.3-bin.tar.gz
-		sudo rm -R maven3
-		sudo mv apache-maven-3.0.3 maven3
+		sudo rm -R maven/3.0.3
+		sudo mv apache-maven-3.0.3 maven/3.0.3
 		sudo rm  apache-maven-3.0.3-bin.tar.gz
-        	echo 'export MAVEN_HOME='$PATH_INSTALL_DIR'/maven3' >> $HOME/.bashrc
+        	echo 'export MAVEN_HOME='$PATH_INSTALL_DIR'/maven/3.0.3' >> $HOME/.bashrc
         	echo 'export PATH=$MAVEN_HOME/bin:$PATH' >> $HOME/.bashrc
 
 		cd maven3
@@ -165,22 +167,22 @@ maven3 ()
 }
 
 # Tomcat 6 installation process
-tomcat6 () 
+tomcat_6 ()
 {
 	sudo apt-get install tomcat6 tomcat6-admin
 	sudo ln -s /var/lib/tomcat6/ $PATH_INSTALL_DIR/tomcat
-	log "Ajouter un utilisateur : 
+	log "Add a user : 
 			gedit /usr/local/tomcat/conf/tomcat-users.xml"
-	log "Modifier le port de tomcat
+	log "Modify tomcat IP port
 			gedit usr/local/tomcat/conf/server.xml"
 
 }
 
 # Tomcat 7 installation process
-tomcat7 () 
+tomcat_7 ()
 {
-	if [ -d "$PATH_INSTALL_DIR/serveurs/tomcat" ]; then
-		log "Tomcat est déjà installé."
+	if [ -d "$PATH_INSTALL_DIR/serveurs/tomcat/7.0.4" ]; then
+		log "Tomcat 7 already installed."
 	else
 
 		cd $PATH_INSTALL_DIR
@@ -192,12 +194,12 @@ tomcat7 ()
 		sudo mv apache-tomcat-7.0.4 tomcat7
 	
 		sudo ln -s $PATH_INSTALL_DIR/serveurs/tomcat7/ $PATH_INSTALL_DIR/tomcat
-		log "Ajouter un utilisateur : 
+		log "Add a user : 
 				gedit /"$PATH_INSTALL_DIR"/tomcat/tomcat-users.xml"
-		log "Modifier le port de tomcat
+		log "Modify the Tomcat IP port
 				gedit "$PATH_INSTALL_DIR"/tomcat/conf/server.xml"
-		echo 'TODO Automatic Starting'
-		#http://wiki.v-collaborate.com/display/BLOG/2010/12/08/Install+Apache+Tomcat+7+on+ubuntu+and+debian
+		#echo 'TODO Automatic Starting'
+		echo 'see ths url form more information: http://wiki.v-collaborate.com/display/BLOG/2010/12/08/Install+Apache+Tomcat+7+on+ubuntu+and+debian'
 	fi
 }
 
@@ -241,43 +243,45 @@ createTomcatInstance ()
 	#type="org.apache.catalina.UserDatabase"/>
 	#</Context>
 
-		sudo /etc/init.d/tomcat start
-
-
+	sudo /etc/init.d/tomcat start
 }
 
 # Nexus server installation process
 nexus () 
 {
-	cd $PATH_INSTALL_DIR
-	mkdir servers
-	cd servers
-	
-	sudo cp nexus-oss-webapp-1.7.2-bundle.tgz /var/lib
-	cd /var/lib
-	sudo tar xvzf nexus-oss-webapp-1.7.2-bundle.tgz
-	sudo mv nexus-oss-webapp-1.7.2 nexus
-	
-	sudo rm nexus-oss-webapp-1.7.2-bundle.tgz
-	
-	sudo echo '#! /bin/sh' > /etc/init.d/nexus
-	sudo echo '/usr/bin/nexus $*' >> /etc/init.d/nexus
-	
-	archi
-	if [ "$arch" = "amd64" ]; then
-		sudo ln -s /var/lib/nexus/bin/jsw/linux-x86-64/nexus /usr/bin/nexus
+	if [ -d "$PATH_INSTALL_DIR/servers/nexus/1.7.2" ]; then
+		log "Nexus 1.7.2 already installed."
 	else
-		udo ln -s /var/lib/nexus/bin/jsw/linux-x86-32/nexus /usr/bin/nexus
-	fi
+		cd $PATH_INSTALL_DIR
+		mkdir servers
+		cd servers
 	
-	sudo ln -s /usr/bin/nexus $PATH_INSTALL_DIR/serveurs/nexus
-	sudo chmod 755 /etc/init.d/nexus
-	sudo update-rc.d nexus defaults
+		sudo cp nexus-oss-webapp-1.7.2-bundle.tgz /var/lib
+		cd /var/lib
+		sudo tar xvzf nexus-oss-webapp-1.7.2-bundle.tgz
+		sudo mv nexus-oss-webapp-1.7.2 nexus/1.7.2
+	
+		sudo rm nexus-oss-webapp-1.7.2-bundle.tgz
+	
+		sudo echo '#! /bin/sh' > /etc/init.d/nexus
+		sudo echo '/usr/bin/nexus $*' >> /etc/init.d/nexus
+	
+		archi
+		if [ "$arch" = "amd64" ]; then
+			sudo ln -s /var/lib/nexus/bin/jsw/linux-x86-64/nexus /usr/bin/nexus
+		else
+			sudo ln -s /var/lib/nexus/bin/jsw/linux-x86-32/nexus /usr/bin/nexus
+		fi
+	
+		sudo ln -s /usr/bin/nexus $PATH_INSTALL_DIR/serveurs/nexus
+		sudo chmod 755 /etc/init.d/nexus
+		sudo update-rc.d nexus defaults
 
-	sudo /etc/init.d/nexus start
+		sudo /etc/init.d/nexus start
 	
-	echo nexus server address: http://localhost:8081/nexus/index.html
-	echo nexus user login : admin/admin123
+		echo nexus server address: http://localhost:8081/nexus/index.html
+		echo nexus user login : admin/admin123
+	fi
 }
 
 # console multifenetre
@@ -290,9 +294,9 @@ sudo add-apt-repository ppa:eclipse-team/debian-package
 sudo aptitude update
 
 # Java
-titre $blanc_bleu "Installation Java     "
+displaytitle $blanc_bleu "- install Java JDK & JRE     "
 
-sudo apt-get install openjdk-6-jdk
+sudo apt-get install openjdk-6-jdk openjdk-6-jre
 
 JAVA= "" #${ java -version }
 #if [ $JAVA -eq "javac 1.6.0_22" ]; then
@@ -303,28 +307,28 @@ log $JAVA
 #fi
 
 # console multifenetre
-titre $blanc_bleu "Console Terminator    "
+displaytitle $blanc_bleu "- install Console Terminator    "
 [[ -z $(which terminator) ]] && sudo apt-get install terminator
 
 # client ftp
-titre $blanc_bleu "Installation filezilla"
+displaytitle $blanc_bleu "- install filezilla"
 [[ -z $(which filezilla) ]] && sudo apt-get install filezilla
 
 # client svn
-titre $blanc_bleu "client svn rabbitvcs  "
+displaytitle $blanc_bleu "- install client svn rabbitvcs  "
 [[ -z $(which rabbitvcs-nautilus) ]] && sudo aptitude install rabbitvcs-nautilus
 # Restart Nautilus
 nautilus -q
 
 # Tomcat
-titre $blanc_bleu "Installation Tomcat   "
-tomcat6
+displaytitle $blanc_bleu "Installation Tomcat   "
+tomcat_6
 
 # eclipse
-titre $blanc_bleu "Installation Eclipse  "
-eclipse_36;
+displaytitle $blanc_bleu "Installation Eclipse  "
+eclipse_36
 
 # maven3
-titre $blanc_bleu "Installation Maven 3  "
-maven3
-
+displaytitle $blanc_bleu "Installation Maven 3  "
+maven_3
+exit 0;

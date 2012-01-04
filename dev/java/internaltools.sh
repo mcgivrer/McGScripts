@@ -70,7 +70,7 @@ export -f log
 #					Affiche un titre en couleur							 #
 #																		 #
 ##########################################################################
-titre ()
+displaytitle ()
 {
 	couleur=$1
 	titre=$2
