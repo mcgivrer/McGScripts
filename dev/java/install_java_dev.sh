@@ -52,7 +52,7 @@ initInstallDir ()
 		log  "    |+ tomcat "
 		log  "    |+ nexus "
 	else
-		echo  "Error: The provided installation path '"$PATH_INSTALL_DIR"' does not exist" 
+		echo  "Error: The provided installation path "$PATH_INSTALL_DIR" does not exist" 
 		exit 100
 	fi
 }
@@ -74,21 +74,26 @@ do
         esac
     fi  
     case $option in
-        d)initInstallDir $2;;
-        h)print_help && exit 0;;
-	"?")
-        log "Unknown option $OPTARG"
-	exit 0
-        ;;
+        d)
+        	initInstallDir $2
+        	;;
+        h)
+        	print_help
+			exit 0
+			;;
+		"?")
+	        log "Unknown option $OPTARG"
+			exit 0
+	        ;;
         ":")
-        log "No argument value for option $OPTARG"
-	exit 0        
-	;;
+	        log "No argument value for option $OPTARG"
+			exit 0        
+			;;
         *)
-        # Should not occur
-        log "Unknown error while processing options"
-	exit 0
-        ;;
+	        # Should not occur
+	        log "Unknown error while processing options"
+			exit 0
+	        ;;
     esac
 done
 
@@ -295,16 +300,15 @@ sudo aptitude update
 
 # Java
 displaytitle $blanc_bleu "- install Java JDK & JRE     "
-
 sudo apt-get install openjdk-6-jdk openjdk-6-jre
 
 JAVA= "" #${ java -version }
-#if [ $JAVA -eq "javac 1.6.0_22" ]; then
-log $JAVA
-#else
-#echo "  "
-#sudo update-alternatives --config java
-#fi
+if [ $JAVA -eq "javac 1.6.0_22" ]; then
+	log $JAVA
+else
+	dipslaytitle "switch to your prefered Java versoion"
+	sudo update-alternatives --config java
+fi
 
 # console multifenetre
 displaytitle $blanc_bleu "- install Console Terminator    "

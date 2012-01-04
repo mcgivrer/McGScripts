@@ -4,7 +4,7 @@
 # Guernion Sylvain - 03/2011
 # GPL
 #
-# Syntaxe: # sudo ./fonctions.sh
+# Syntaxe: # sudo ./internaltools.sh
 VERSION="0.01"
 #	Version : 14032001
 #
@@ -13,7 +13,7 @@ VERSION="0.01"
 
 #	CONSTANTES
 #
-SCRIPT_URL= 'http://gsylvain35.googlecode.com/svn/scripts/'
+export SCRIPT_URL='https://mcgivrer@github.com/mcgivrer/McGScripts/blob/master/dev/java/'
 #couleur Text_fond
 #
 noir_gris='\E[30;47m'
@@ -27,7 +27,7 @@ blanc_bleu='\E[37;44m'
 blanc_rouge='\E[37;41m'
 
 ##########################################################################
-#					TÃ©lecharge et exÃ©cute un script 					 #
+#					Télécharge et exécute un script 					 #
 #																		 #
 ##########################################################################
 download_And_Exec ()
@@ -45,7 +45,7 @@ download_And_Exec ()
 export -f download_And_Exec
 
 ##########################################################################
-#	TÃ©lecharge un script et lui donne les droits d'exÃ©cution			 #
+#	Télécharge un script et lui donne les droits d'exécution			 #
 #																		 #
 ##########################################################################
 download ()
@@ -78,7 +78,7 @@ displaytitle ()
 	echo -e "$couleur""\033[1m                      $titre                            \033[0m"
 	echo -e "$couleur""\033[1m========================================================================\033[0m"
 }
-export -f titre
+export -f displaytitle
 
 ##########################################################################
 #							Affiche un menu								 #
@@ -129,15 +129,14 @@ export -f Menu
 rootRequired ()
 {
 if [ $EUID -ne 0 ]; then
-  echo "Le script doit Ãªtre lancÃ© en root: # sudo $0" 1>&2
+  echo "script must be start with root privileges: # sudo $0" 1>&2
   exit 1
 fi
 }
-
 export -f rootRequired
 
 ##########################################################################
-#					DÃ©tecte le type d'os (32/67 bits)					 #
+#					Détecte le type d'os (32/64 bits)					 #
 #																		 #
 ##########################################################################
 archi ()
@@ -155,12 +154,10 @@ archi ()
 		;;
 	esac
 }
-
-
 export -f archi
 
 ##########################################################################
-#			VÃ©rifie si il existe une mise a jour du script				 #
+#			Vérifie si il existe une mise a jour du script				 #
 #																		 #
 ##########################################################################
 check_update () 
