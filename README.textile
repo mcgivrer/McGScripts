@@ -6,6 +6,6 @@ h2. Java Environment
 
 p. Create and/or update some scripts (already existing) to perform java development on Ubuntu worsktation.
 
-h3. dev/java/insgtall_java_dev.sh
+h3. dev/java/install_java_dev.sh
 
 p. This first script is an evolution of this script 'http://gsylvain35.googlecode.com/svn/scripts/developpement.sh'
